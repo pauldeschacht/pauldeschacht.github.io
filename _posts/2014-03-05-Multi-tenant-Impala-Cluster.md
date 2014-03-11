@@ -14,4 +14,8 @@ The intermediate server is nothing more than a proxy:
 2. If the access is authorized, forward the query to the Impala cluster.
 
 
+# Understanding communication with HS2 server
 
+The [Cloudera HiveServer](https://github.com/pauldeschacht/hive/tree/cdh4.5.0-release/service/src/java/org/apache/hive/service) starts 2 thrift services: the CLIServer and the ThriftCLIService. This post will concentrate on the ThriftCLIService, as it implements the HiveServer2 protocol. As mentioned in the [Thrift post](pauldeschacht.github.io/thrift/2014/02/27/Understanding-Trift.html#additional_information), the service binds a TTransport and a TProcessor together. The type of transport (TServerSocker, TSSLTransport, ...) is determined by the hive-site parameters file and is handled by the [HiveAuthFactory](https://github.com/pauldeschacht/hive/blob/cdh4.5.0-release/service/src/java/org/apache/hive/service/auth/HiveAuthFactory.java#L118).
+
+The possible options are NONE, SASL, LDAP, KERBEROS and CUSTOM. Since the authentication is granted by an external REST server.
