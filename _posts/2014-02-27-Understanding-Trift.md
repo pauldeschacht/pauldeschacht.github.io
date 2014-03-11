@@ -331,6 +331,6 @@ The transport used on the client side must correspond to the one used on the ser
 
 * TSocket: simple socket communication
 * TSSLTransport: secure socket communication
-* TSaslTransport: [simple authentication and security layer](#http://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer). The SASL mechanism supports a series of challenges& responses, such as ANONYMOUS, PLAIN, DIGEST-MD5 and GSSAPI. The GSSAPI supports Kerberos [Here is an example](#http://stackoverflow.com/questions/13803354/kerberos-for-thrift). For the Java world, the javax.security.sasl module is used, I haven't found a Thrift C/C++ SASL client.
+* TSaslTransport: [simple authentication and security layer](http://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer). The SASL mechanism supports a series of challenges& responses, such as ANONYMOUS, PLAIN, DIGEST-MD5 and GSSAPI. The GSSAPI supports Kerberos [Here is an example](http://stackoverflow.com/questions/13803354/kerberos-for-thrift). For the Java world, the javax.security.sasl module is used, I haven't found a Thrift C/C++ SASL client.
 
 ![alt text](/images/thrift_transport.gif "Thrift TTransport")
