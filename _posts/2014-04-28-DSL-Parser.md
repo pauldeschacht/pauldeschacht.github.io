@@ -341,11 +341,26 @@ Likewise, the function date-yyyy-month receives the value of the current cell ("
            {:name "date" :value "1-Dec-2014" } ] }
 ```
 
+#### Repeating values
 
 Sometimes it is needed to *repeat* the values in a column. This is mostly the case with Excel files where a value is only set once, and the cells below are supposed to have the same value. The option :repeat-down true in the DSL will explicitely repeat that value. The repetition is done as long as the cell is not empty.
 
+### Output 
 
-## DSL
+#### Single output 
 
-# Examples DSL Parser
+#### Multiple output 
 
+## Note
+
+For a more complete and complex example, you can have a look at the [DSL](https://github.com/pauldeschacht/paxparser/blob/master/src/parser/pax/dsl/destatis.clj) that parses the [public German airport data](https://www.destatis.de/DE/Publikationen/Thematisch/TransportVerkehr/Luftverkehr/Luftverkehr2080600141025.xlsx?__blob=publicationFile). 
+
+# Extending the DSL
+
+## Write your custom function
+
+## Add an abstraction 
+
+### Core of parser
+
+### Pax abstraction
