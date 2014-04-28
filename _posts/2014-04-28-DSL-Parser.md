@@ -25,7 +25,7 @@ Troughout the explanation, I will use a small example.
 "Total;3000.0"
 ```
 
-The result will look like:
+The output of the DSL parser must look like:
 ```javascript
 airport^BRU^BE^1000^01-Jan-2014
 airport^CDG^FR^2000^01-Dec-2013
@@ -39,9 +39,7 @@ A number of transformations took place:
 5. The column city is completely ignored
 6. The year month columns are merged and are transformed into a single date
 
-This transformation represents the most common use cases, but is possible to build far more complex transformations.
-
-The DSL part is written in Clojure and can contain any Clojure defined function. The example DSL `simple-dsl` is responsible for the previous transformation:
+This transformation represents some of the common use cases, but is possible to extend with far more complex transformations. The DSL `simple-dsl` below is enough to execute the required transformations.
 
 ```clojure
 (def simple-dsl {
@@ -67,6 +65,7 @@ The DSL part is written in Clojure and can contain any Clojure defined function.
 })
 ```
 
+The DSL part is written in Clojure and can contain any Clojure defined function.
 
 ## Data Flow 
 
