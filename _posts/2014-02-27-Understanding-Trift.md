@@ -20,6 +20,7 @@ In this post, I will explain how Thrift works internally by following the consec
 
 The [Thrift IDL example](http://thrift.apache.org/tutorial/java/) that comes with Thrift 0.9 defines a Calculator service. I will only focus on the `add` function for the synchronous clients. Additional Thrift features such as remote exceptions, one way calls or async RPC's are easy to understand once the basic  `add` function is understood. 
 
+
 ```Java
 service Calculator extends shared.SharedService {
    void ping(),
@@ -30,6 +31,7 @@ service Calculator extends shared.SharedService {
 ```
 
 The Java code that underlies the client and server are generated using:
+
 
 ```shell
 thrift -r -gen java tutorial.thrift
