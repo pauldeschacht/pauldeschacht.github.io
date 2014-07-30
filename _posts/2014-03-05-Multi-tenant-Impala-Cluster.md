@@ -51,7 +51,6 @@ During initialization of the server, the delegate is constructed. The delegate w
 
 
 ```Java
-  @Override
   public synchronized void init(HiveConf hiveConf) {
     this.hiveConf = hiveConf;
     super.init(hiveConf);
