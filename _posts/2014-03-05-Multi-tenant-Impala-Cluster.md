@@ -50,7 +50,7 @@ These 3 functions will be intercepted and a specific action will be done before 
 During initialization of the server, the delegate is constructed. The delegate will forward the requests to the actual Impala server.
 
 
-```Java
+{% highlight java %}
   public synchronized void init(HiveConf hiveConf) {
     this.hiveConf = hiveConf;
     super.init(hiveConf);
@@ -68,7 +68,7 @@ During initialization of the server, the delegate is constructed. The delegate w
         LOG.error(e.toString());
     }
   }
-```
+{% endhighlight %}
 
 ## Forward the requests to the actual Impala server
 
