@@ -75,7 +75,6 @@ During initialization of the server, the delegate is constructed. The delegate w
 For most Thrift requests, the request is simply forwarded to the actual Impala server.
 
 ```Java
-  @Override
   public TGetTablesResp GetTables(TGetTablesReq req) throws TException {
       return delegate.GetTables(req);
   }
