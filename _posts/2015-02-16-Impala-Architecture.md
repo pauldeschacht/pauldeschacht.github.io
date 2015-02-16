@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "Impala Architecture"
+date:   2015-02-16
+categories: impala
+---
+
 # Impala Architecture #
 
 ## Table of Contents
