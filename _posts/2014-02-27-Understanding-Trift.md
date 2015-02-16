@@ -33,7 +33,7 @@ service Calculator extends shared.SharedService {
 The Java code that underlies the client and server are generated using:
 
 
-{% highlight shell %}
+{% highlight java %}
 thrift -r -gen java tutorial.thrift
 {% endhighlight %}
 
