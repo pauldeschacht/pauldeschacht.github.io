@@ -20,35 +20,38 @@ In this post, I will explain how Thrift works internally by following the consec
 
 The [Thrift IDL example](http://thrift.apache.org/tutorial/java/) that comes with Thrift 0.9 defines a Calculator service. I will only focus on the `add` function for the synchronous clients. Additional Thrift features such as remote exceptions, one way calls or async RPC's are easy to understand once the basic  `add` function is understood. 
 
-```Java
+
+{% highlight java %}
 service Calculator extends shared.SharedService {
    void ping(),
    i32 add(1:i32 num1, 2:i32 num2),
    i32 calculate(1:i32 logid, 2:Work w) throws (1:InvalidOperation ouch),
    oneway void zip()
 }
-```
+{% endhighlight %}
 
 The Java code that underlies the client and server are generated using:
 
-```shell
+
+{% highlight java %}
 thrift -r -gen java tutorial.thrift
-```
+{% endhighlight %}
 
 The generated code is located in gen-java. 
 
 #Client side
 
-```Java
+{% highlight java %}
 TTransport transport = new TSocket(host, port);
 TProtocol protocol = new TBinaryProtocol();
 Calculator.Client client = new Calculator.Client(protocol);
 int r = client.add(1,2);
-```
+{% endhighlight %}
+
 
 The constructor of the client passes the TBinaryProtocol. This protocol will be used for all communication (in- and outgoing) between client and server.
 
-```Java
+{% highlight java %}
 Calculator.Client (TProtocol p) {
   super (p);
 }
@@ -57,18 +60,18 @@ TServiceClient (TProtocol p) {
  iprot_ = p; // input protocol
  oprot_ = p; // output protocol
 }
-```
+{% endhighlight %}
 
 The client makes a RPC to the server using 2 arguments and expects an integer as result.
 
-```Java
+{% highlight java %}
 int r = client.add (1,2);
-```
+{% endhighlight %}
 
 The generated code transforms this function call to a sequence of sending and receving information. The main information to be send is the name of the function to be called "
 add" and the arguments: 1 and 2.
 
-```Java
+{% highlight java %}
 int Calculator.Client.add (int num1, int num2) {
   send_add (i1,i2);
   return recv_add ();
@@ -80,26 +83,25 @@ void Calculator.Client.send_add (int num1, int num2) {
   a.setNum2 (num2);
   sendBase ("add", a);
 }
-```
+{% endhighlight %}
 
 The arguments (similar for the results) for each services are wrapped into a Java class. The class add_args (derived from TBase) is a placeholder for the arguments of the RPC.
 The function sendBase is implemented by the TServiceClient, the parent of Calculator.Client
 
-```Java
+{% highlight java %}
 void TServiceClient.sendBase (String name, TBase args) {
   oprot_.writeMessageBegin (new TMessage(methodName, TMessageType.CALL, ++seqid));
   args.write (oprot_);
   oprot_.writeMessagEnd ();
   oprot_.getTransport ().flush ();
 }
-```
+{% endhighlight %}
 
 The sendBase writes the header of the RPC to the protocol, then the instance of the argument class (add_args) writes the values (1 and 2) to the TProtocol, the parent class writes the tail of the RPC and finally, the tranport layer is called to send the message to the server.
 
 As mentioned before, the argument class add_args is a placeholder for the arguments of the RPC. In this case "add", it holds 2 integers. The class has convenience methods, such as getters, setters, and deals with optional fields etc. The main functionality of the class is to write the values of the arguments to a TProtocol. Since a TProtocol supports different schemes (StandardScheme and TupleScheme), the argument class must implement a read/write for each scheme
 
-```Java
-
+{% highlight java %}
 class add_args implements org.apache.thrift.TBase<...>, ... {
 public void write (org.apache.thrift.protocol.TProtocol oprot) ... {
   /* according to the scheme defined in iprot, 
@@ -127,12 +129,12 @@ class add_argsTupleScheme extends TupleScheme<..> {
     ..
   }
 }
-```
+{% endhighlight %}
  
 In this example, the concrete TProtocol used is TBinaryProtocol. Each TProtocol is associated with a TTransport. 
 
 
-```Java
+{% highlight java %}
 class TBinaryProtocol ... extends TProtocol {
   public TBinaryProtocol(TTransport trans) { 
     super(trans) 
@@ -156,11 +158,11 @@ class TProtocol ... {
   ..
   transport_.write(bytes,0,4);
 }
-```
+{% endhighlight %}
 
 The TTransport is implemented by TSocket. In this example, the TTransport is implemented by TSocket. This class communicates over sockets and uses standard Java IO streams. 
 
-```Java
+{% highlight java %}
 TSocket(Socket socket) {
   inputStream_ = new BufferedInputStream(socket.getInputStream(), ... );
   outputStream_ = new BufferedOutputStream(socket.getOutputStream(), ... );
@@ -169,7 +171,7 @@ TSocket(Socket socket) {
 TSocket.write(byte[] buf, int offset, int len) .. {
   outputStream_.write(buf,offset,len);
 }
-```
+{% endhighlight %}
 
 
 
@@ -183,7 +185,7 @@ The server side of a Thrift code base consists of 2 components:
 
 The handler is the only class that needs to be coded by the end user. This class implements the services defined in the thrift IDL. These services are part of an interface : 
 
-```Java
+{% highlight java %}
 public interface Calculator.Iface {
   public void ping();
   public int add(int num1, int num2);
@@ -197,31 +199,31 @@ public class CalculatorHandler implements Calculator.Iface {
   int add(int num1, int num2) {
     return num1+ num2;
 }
-```
+{% endhighlight %}
 
 
 ## The server
 
 The server connects the handler, the processor, the protocols and the transports. 
 
-```Java
+{% highlight java %}
 CalculatorHandler handler = new CalculatorHandle();
 Calculator.Processor processor = new Calculator.Processor(handler);
-```
+{% endhighlight %}
 
 The Processor exposes a map of names associated with functions (ProcessFunction). Each name corresponds to the name of a function ("ping", "add", ...) and the associated functions will wrap the call to the appropriate service in the handler.
 
-```
+{% highlight java %}
 Calculator.Processor(Calculator.Iface handler, ... ) {
   map.put("ping", new ping());
   map.put("add", new add()); 
   ...
 }
-```
+{% endhighlight %}
 
 Inside the Calculator.Processor, there is a class for each service (ProcessFunction). Each class implements the getResult function which is responsible for calling the service in the handler.
 
-```
+{% highlight java %}
 class Calculator.Processor.ping<...> {
   ..
   void getResult(Calculator.Iface handler, ping_args args) .. {
@@ -240,25 +242,25 @@ class Calculator.Processor.add<...> {
     return r;
   }
 }
-```
+{% endhighlight %}
 
 The TServerSocket creates an instance of a standard Java server socket.
 
-```Java
+{% highlight java %}
 TServerTransport serverTransport = new TServerSocket(9090);
-```
+{% endhighlight %}
 
 The TSimpleServer starts listening to the TServerSocket. 
 
-```Java
+{% highlight java %}
 TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
 server.serve();
-```
+{% endhighlight %}
 
 The server waits for incoming messages. The message is decoded, the appropriate services in the handler are called and the result is returned. Building the results follows the same logics as building the arguments (add_args and add_result classes).
 
 
-```Java
+{% highlight java %}
 public void TServer.serve() ... {
  
   TTransport client = serverTransport_.accept();
@@ -276,11 +278,11 @@ public void TServer.serve() ... {
     processor.process(iprot, oprot);
     ...
 }
-```
+{% endhighlight %}
 
 The dispatching of the incoming message to the service in the handler is done by the Processor.
 
-```Java
+{% highlight java %}
 Calculator.Processor extends org.apache.thrift.TBaseProcessor<..> implements org.apache.thrift.Processor 
 
 Calculator.Processor contains a pointer to the handler
@@ -292,13 +294,13 @@ TBaseProcessor.process(TProtocol i, TProtocol o) {
   fn.process(msg.seqId, in, out, handler);
   return true;
 }
-```
+{% endhighlight %}
 
 For the function `add`, fn is an instance of type `Calculator.Processor.add<...>` which extends the `ProcessFunction`.
 
 The process function is templated with the handler class (CalculatorHandler) and the argument class (Calculator.add_args)
 
-```Java
+{% highlight java %}
 ProcessorFunction<Iface, T extends TBase> {
   process(int seqId, TProtocol iprot, TProtocol oprot, Iface handler) {
     T args = getEmptyArgs()
@@ -313,7 +315,7 @@ ProcessorFunction<Iface, T extends TBase> {
     oprot.getTransport().flush();
   } 
 }
-```
+{% endhighlight %}
 
 # Additional Information
 

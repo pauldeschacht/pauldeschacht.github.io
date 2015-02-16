@@ -49,8 +49,8 @@ These 3 functions will be intercepted and a specific action will be done before 
 
 During initialization of the server, the delegate is constructed. The delegate will forward the requests to the actual Impala server.
 
-```Java
-  @Override
+
+{% highlight java %}
   public synchronized void init(HiveConf hiveConf) {
     this.hiveConf = hiveConf;
     super.init(hiveConf);
@@ -68,14 +68,13 @@ During initialization of the server, the delegate is constructed. The delegate w
         LOG.error(e.toString());
     }
   }
-```
+{% endhighlight %}
 
 ## Forward the requests to the actual Impala server
 
 For most Thrift requests, the request is simply forwarded to the actual Impala server.
 
-```Java
-  @Override
+{% highlight java %}
   public TGetTablesResp GetTables(TGetTablesReq req) throws TException {
       return delegate.GetTables(req);
   }
@@ -83,13 +82,13 @@ For most Thrift requests, the request is simply forwarded to the actual Impala s
   public TGetColumnsResp GetColumns(TGetColumnsReq req) throws TException {
       return delegate.GetColumns(req);
   }
-```
+{% endhighlight %}
 
 ## Capture the new sessions
 
 The OpenSession request is first forwarded to the actual Impala server. The reply contains a session identifier which is then linked to the session's user information. A simple mapping from a session identifier to the user information is maintained.
 
-```Java
+{% highlight java %}
   @Override
   public TOpenSessionResp OpenSession(TOpenSessionReq req) throws TException {
       TOpenSessionResp resp = delegate.OpenSession(req);
@@ -99,13 +98,13 @@ The OpenSession request is first forwarded to the actual Impala server. The repl
       ...
       sessions.addSession(username,password,ip,resp.getSessionHandle());
       return resp;
-```
+{% endhighlight %}
 
 ## Capture the SQL statement 
 
 Each request that executes a SQL statement is intercepted. The mapping from session to user information tells which user executes the SQL statement. The remote authentication server informs us whether the user has the permission to execute the statement. If granted, the request is forwarded to the actual Impala server. Otherwise, a response with an appropriate message is constructed.
 
-```Java
+{% highlight java %}
   @Override
   public TExecuteStatementResp ExecuteStatement(TExecuteStatementReq req) throws TException {
       LOG.info("Execute statement : " + req.getStatement() );
@@ -126,7 +125,7 @@ Each request that executes a SQL statement is intercepted. The mapping from sess
       return response;
       }
   }
-```
+{% endhighlight %}
 
 
 # A small note on the secure communication with HiveServer2 server
