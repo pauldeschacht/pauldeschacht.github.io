@@ -2,6 +2,7 @@ name: Technical Articles
 description: In depth articles on a few big data technologies
 url: http://pauldeschacht.io
 markdown: kramdown
+highlighter: rouge
 pygments: true
 safe: true
 lsi: false
