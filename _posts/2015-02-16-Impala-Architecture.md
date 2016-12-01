@@ -166,7 +166,7 @@ In this section we will go through the three steps of the Query Planner’s proc
 The query planner starts to parse the textual representation of the query in a logical plan. The logical plan is a number of consecutive steps needed to execute the query and is represented by a tree, where each node in the tree performs a single simple operation, as shown in Figure 7.3 below. 
 The query planner starts to parse the textual representation of the query in a logical plan. The logical plan is a number of consecutive steps needed to execute the query and is represented by a tree, where each node in the tree performs a single simple operation, as shown in Figure 3 below. 
  
-<img src="/images/ImpalaArchitecture/LogicalPlan.gif" alt="Logical Plan" width=400px/>
+<img src="/images/ImpalaArchitecture/LogicalPlan.gif" alt="Logical Plan" width="400px"/>
 **Figure 3 Logical Plan of the SQL query**
 
 As you can see in the figure, when querying data  from the Nasa dataset, data flows from the bottom of the tree to the top. Each node processes the incoming data and pushes the results further up the tree. At the bottom of the tree, the nodes will scan the tables, while the top node contains the final results of the query.
