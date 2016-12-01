@@ -145,7 +145,7 @@ Listing 3 Return the top 10 countries that visit the NASA web site
 
 The Impala daemon is the component where all the action takes place. Within impalad (the technical name for Impala daemon), there are 3 layers, as shown below in figure 2: Query Planner, Query Coordinator, and Query Executor.
  
-<img src="/images/ImpalaArchitecture/Daemon.gif" alt="Impala Daemon" width=400px/>
+<img src="/images/ImpalaArchitecture/Daemon.gif" alt="Impala Daemon" width="400px"/>
 **Figure 2 The three layers of the Impala daemon**
 
 - Top layer: Query Planner accepts and validates the SQL queries, transforms them into a mathematical plan and finally compiles the plan into a distributed query plan made up of fragments, which it hands over to the Query Coordinators. 
@@ -213,7 +213,7 @@ Once the early elimination strategy is applied, the optimizer continues with the
 
 As discussed in chapter 5, a join operation matches each row of the first table with each row of the second table. In most cases, the matching is done by keeping one table completely in memory, and by scanning the second table row by row. During the scan, each scanned row is matched against each row of the in-memory table. It’s obvious to keep the smallest table in memory and scan the largest table. A left-deep tree strategy, as implemented by Impala, keeps the right-hand table in memory and scans the left-hand table. The name *left-deep* tree comes from the resulting tree, which has a long left side branch with small branches on the right, as you originally saw in Figure 3, repeated here for clarity.
 
-<img src="/images/ImpalaArchitecture/LeftDeepTree.gif" alt="Left Deep Tree" width=400px/>
+<img src="/images/ImpalaArchitecture/LeftDeepTree.gif" alt="Left Deep Tree" width="400px"/>
 **Figure 4 Impala’s left-deep tree strategy results in logical plans with long branches on the left side**
 
 
@@ -348,7 +348,7 @@ What we have been discussing is the transformation of the query and the optimiza
 
 The final task of the Query Planner is to partition the optimized plan into plan fragments. As Figure 5 shows, each plan fragment is distributed to one or more nodes in the cluster. 
 
-<img src="/images/ImpalaArchitecture/DistributedPlanFragments.gif" alt="Distributed Plan Fragments" width=400px/>
+<img src="/images/ImpalaArchitecture/DistributedPlanFragments.gif" alt="Distributed Plan Fragments" width="400px"/>
 **Figure 5 View of the distributed plan fragments.**
 
 
@@ -419,7 +419,7 @@ Data alignment is the way the data is organized in memory. When the data is orga
 
 Processors access memory in chucks. For example, on a 64-bit processor, the chunk size is 8 bytes (which is 64 bits). The processor reads data from memory at offsets that are a multiple of 8. If an application needs data that is located at offset 14, the CPU will read the chunk at offset 8 and do some arithmetic to extract the requested data. To avoid this inefficient access, it is possible to align each data record at the start of a chunk. This practice, also known as padding, is less efficient in memory size, since it inserts empty spaces. Instead of locating the data record at offset 14, it will be moved to offset 16 and the location 14 and 15 will remain empty. The advantage is that the processor can access the requested data without any additional extraction arithmetic. Aligned data looks like LEGO blocks ranged on a single line, as shown in the figure below, compared to the blocks packed in a square.
  
-<img src="/images/ImpalaArchitecture/DataAlignment.gif" alt="Distributed Plan Fragments" width=200/>
+<img src="/images/ImpalaArchitecture/DataAlignment.gif" alt="Distributed Plan Fragments" width="200px"/>
 **Figure 5 Data Alignment: top figure shows packed data, bottom figure shows aligned data**
 
  
@@ -492,7 +492,7 @@ Listing 15 Impact of code generation
 A lot of Impala’s optimizations  are made possible thanks to an open-source compiler toolkit called LLVM (Low-Level Virtual Machine). The Query Executor uses LLVM components to generate and optimize code during run-time. The generated code is tailored made for the specific local hardware of the node on which the Query Executor is running. Central to the LLVM toolkit is the assembler-like language, called LLVM IR (Intermediate Representation, as shown in Listing 13). LLVM IR is a typed low-level instruction set, very similar to Java byte code. The compiler tool is implemented in 3 phases, as shown in Figure 6 below:
 
 
-<img src="/images/ImpalaArchitecture/LVM.gif" alt="LVM" width=400/>
+<img src="/images/ImpalaArchitecture/LVM.gif" alt="LVM" width="400px"/>
 **Figure 6 The three phases of the Low-Level Virtual Machine work together optimize Impala’s performance**
 
 As you can see in the figure above, the Low-Level Virtual Machine includes:
